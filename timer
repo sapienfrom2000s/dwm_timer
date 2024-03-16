@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+require 'yaml'
+
+time = ARGV[0].to_i
+
+def seconds_to_hhmmss(seconds)
+  hours = seconds / 3600
+  minutes = (seconds % 3600) / 60
+  seconds = seconds % 60
+  format("%02d:%02d:%02d", hours, minutes, seconds)
+end
+
+loop do
+  time_left = seconds_to_hhmmss(time)
+  time_left_hash = {'time_left' => time_left}
+  File.write('info.yml', time_left_hash.to_yaml)
+  time = time - 1
+  if time == 0
+    time_left_hash = {'time_left' => 'Time Over'}
+    File.write('info.yml', time_left_hash.to_yaml)
+    break
+  end
+  sleep 1
+end
+
+
